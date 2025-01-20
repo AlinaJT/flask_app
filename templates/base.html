@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {# Basic meta tags for character encoding and responsive design #}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# Dynamic title block that child templates can override #}
+    <title>{% block title %}{% endblock %} - Project Manager</title>
+    <style>
+        /* Base styles - Reset and global layout */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f7ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation bar styling */
+        nav {
+            background-color: #1E3A8A;
+            padding: 1rem;
+            color: white;
+        }
+
+        /* Navigation container for alignment and spacing */
+        .nav-container {
+            max-width: 72rem;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Navigation title and branding styles */
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+        }
+
+         /* Navigation link styles with hover effects */
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: #2563EB;
+
+        }
+
+        /* Main content area styles */
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 72rem;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Flash messages styling - Notification system */
+        .flash-messages {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 24rem;
+        }
+
+        /* Individual flash message styling */
+        .flash-message {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Success and error message variants */
+        .flash-message.success {
+            border-left: 4px solid #059669;
+            color: #065f46;
+        }
+
+        .flash-message.error {
+            border-left: 4px solid #DC2626;
+            color: #991b1b;
+        }
+
+        /* Authentication form container styling */
+        .auth-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form title styling */
+        .form-title {
+            color: #1E3A8A;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Form group styling for input fields */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        /* Form label styling */
+        .form-group label {
+            display: block;
+            color: #4B5563;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Form input field styling */
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Input focus state styling */
+        .form-group input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+         /* Submit button styling */
+        .submit-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #3B82F6;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-button:hover {
+            background-color: #2563EB;
+        }
+
+         /* Project related styles */
+        .project-container {
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+
+         /* Grid layout for project cards */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+         /* Individual project card styling */
+        .project-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+
+        /* Project card hover effect */
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Animation keyframes for slide-in effect */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Utility classes for common styling needs */
+        .container {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        /* Footer styles */
+        .footer-container {
+            text-align: center;
+            padding: 1rem;
+            color: #4B5563;
+            background-color: white;
+            border-top: 1px solid #E5E7EB;
+        }
+    </style>
+
+    {# Additional CSS block for child templates #}
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {# Navigation bar - Only shown for logged-in users #}
+    {% if session.user_id %}
+    <nav>
+        <div class="nav-container">
+            <div class="nav-title">
+                <span class="nav-brand">Plan.io</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('new_project') }}" class="nav-link">New Project</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    {# Flash messages section for displaying notifications #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {# Main content block for child templates #}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {# Footer section #}
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2025 Project Manager. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {# JavaScript for auto-hiding flash messages #}
+    <script>
+        // Auto-hide flash messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    message.style.transition = 'opacity 0.3s ease-out';
+                    setTimeout(() => message.remove(), 300);
+                }, 5000);
+            });
+        });
+    </script>
+
+{# Additional JavaScript block for child templates #}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

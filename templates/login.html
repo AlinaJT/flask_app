@@ -1,0 +1,147 @@
+{# Extend the base template #}
+{% extends "base.html" %}
+
+{# Set page title #}
+{% block title %}Login{% endblock %}
+
+{# Main content block #}
+{% block content %}
+{# Authentication container #}
+<div class="auth-container">
+    {# Application logo/title #}
+    <h1 class="form-title">Plan.io</h1>
+
+    {# Login form #}
+    <form method="POST" action="{{ url_for('login') }}">
+        {# Username input field #}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+
+        {# Password input field #}
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        {# Submit button #}
+        <button type="submit" class="submit-button">Sign in</button>
+
+        {# Registration link #}
+        <div class="auth-links">
+            <a href="{{ url_for('register') }}" class="auth-link">New here? Create an account</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{# Additional CSS styles #}
+{% block extra_css %}
+<style>
+     /* Center content on page */
+    body {
+        background-color: #f8fafc;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Authentication container styling */
+    .auth-container {
+        max-width: 400px;
+        width: 90%;
+        margin: 2rem auto;
+        background-color: white;
+        padding: 2.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Application title styling */
+    .form-title {
+        color: #1a1a1a;
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        letter-spacing: -0.025em;
+    }
+
+    /* Form group layout */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Form label styling */
+    .form-group label {
+        display: block;
+        color: #4B5563;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+    /* Form input styling */
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid #E5E7EB;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+    }
+
+    /* Input focus state */
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Submit button styling */
+    .submit-button {
+        width: 100%;
+        padding: 0.875rem;
+        background-color: #2563EB;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Submit button hover state */
+    .submit-button:hover {
+        background-color: #1D4ED8;
+    }
+
+    /* Authentication links container */
+    .auth-links {
+        text-align: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #E5E7EB;
+    }
+
+    /* Authentication link styling */
+    .auth-link {
+        color: #4B5563;
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: color 0.2s;
+    }
+
+     /* Authentication link hover state */
+    .auth-link:hover {
+        color: #2563EB;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

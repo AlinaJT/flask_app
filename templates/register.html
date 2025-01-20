@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Main container for the registration form */
+    .auth-container {
+        max-width: 400px;
+        margin: 2rem auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form title styling */
+    .form-title {
+        color: #1E3A8A;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Form group container styling */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    /* Label styling for form inputs */
+    .form-group label {
+        display: block;
+        color: #4B5563;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    /* Input field styling */
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #D1D5DB;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+    }
+
+    /* Input focus state styling */
+    .form-group input:focus {
+        outline: none;
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Helper text for password requirements */
+    .password-requirements {
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin-top: 0.5rem;
+    }
+
+    /* Submit button styling */
+    .submit-button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #3B82F6;
+        color: white;
+        border: none;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        margin-bottom: 1rem;
+    }
+
+    /* Submit button hover state */
+    .submit-button:hover {
+        background-color: #2563EB;
+    }
+
+    /* Login link container styling */
+    .login-link {
+        text-align: center;
+        color: #4B5563;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #E5E7EB;
+    }
+
+    /* Login link styling */
+    .login-link a {
+        color: #3B82F6;
+        text-decoration: none;
+    }
+
+    /* Login link hover state */
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* Requirements list styling */
+    .requirements-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0;
+        font-size: 0.875rem;
+        color: #6B7280;
+    }
+
+    /* Individual requirement item styling */
+    .requirements-list li {
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Bullet point styling for requirements */
+    .requirements-list li::before {
+        content: "•";
+        color: #3B82F6;
+    }
+
+    /* Error message styling */
+    .error-message {
+        color: #DC2626;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{# Main registration form container #}
+<div class="auth-container">
+    <h1 class="form-title">Create an Account</h1>
+
+    {# Registration form with validation attributes #}
+    <form method="POST" action="{{ url_for('register') }}" id="register-form">
+        {# Username field with validation #}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                autofocus
+                minlength="3"
+                maxlength="30"
+                pattern="^[a-zA-Z0-9_-]+$"
+            >
+            <div class="requirements-list">
+                <li>3-30 characters long</li>
+                <li>Can contain letters, numbers, underscores, and hyphens</li>
+            </div>
+        </div>
+
+        {# Email field #}
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+            >
+        </div>
+
+        {# Password field with requirements #}
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                minlength="8"
+            >
+            <ul class="requirements-list">
+                <li>At least 8 characters long</li>
+                <li>Must include uppercase and lowercase letters</li>
+                <li>Must include at least one number</li>
+                <li>Must include at least one special character</li>
+            </ul>
+        </div>
+
+        {# Password confirmation field #}
+        <div class="form-group">
+            <label for="confirmation">Confirm Password</label>
+            <input
+                type="password"
+                id="confirmation"
+                name="confirmation"
+                required
+            >
+        </div>
+
+        <button type="submit" class="submit-button">Create Account</button>
+
+        {# Login link for existing users #}
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+     // Get form and password field references
+    const form = document.getElementById('register-form');
+    const password = document.getElementById('password');
+    const confirmation = document.getElementById('confirmation');
+
+    // Validate passwords match on form submission
+    form.addEventListener('submit', function(event) {
+        if (password.value !== confirmation.value) {
+            event.preventDefault();
+            confirmation.setCustomValidity("Passwords don't match");
+        } else {
+            confirmation.setCustomValidity('');
+        }
+    });
+
+    // Real-time password match validation
+    confirmation.addEventListener('input', function() {
+        if (password.value === confirmation.value) {
+            confirmation.setCustomValidity('');
+        } else {
+            confirmation.setCustomValidity("Passwords don't match");
+        }
+    });
+</script>
+{% endblock %}
